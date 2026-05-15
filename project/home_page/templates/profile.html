@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<section class="text-white flex items-center flex-col w-full gap-[30px]">
+    <h2 class="text-6xl">
+        <span class="text-green-400">{{user.name}}</span>'s personal information
+    </h2>
+    <div class="w-full flex items-start justify-center gap-[30px]">
+        <div class="relative">
+            <img src="https://i.pinimg.com/736x/19/e6/6e/19e66e7b54a1a06baea79eb1bb7cd725.jpg" alt="" class="w-[200px] h-[200px] rounded-[50%] object-cover">
+            <div class="absolute bottom-2 right-2 border border-gray-300 flex items-center justify-center w-[40px] h-[40px] rounded-[50%] bg-[rgba(0,0,0,0.5)] cursor-pointer duration-100 hover:bg-gray-300 text-gray-300 hover:text-black">
+                <i class="fa-solid fa-pen "></i>
+            </div>
+        </div>
+        <div>
+            <div class="flex items-center gap-[10px]">
+                <p>User </p>
+                <p>{{ user.name }}</p>
+            </div>
+            <div class="flex items-center gap-[10px]">
+                <p>Surname: </p>
+                <p>{{ user.surname }}</p>
+            </div>
+            <div class="flex items-center gap-[10px]">
+                <p>Username: </p>
+                <p>{{ user.username }}</p>
+            </div>
+            <div class="flex items-center gap-[10px]">
+                <p>Email: </p>
+                <p>{{ user.email }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

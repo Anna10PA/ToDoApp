@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/b2005d7310.js" crossorigin="anonymous"></script>
+    <title>To Do App</title>
+</head>
+
+<body class="bg-black relative">
+    <header
+        class="bg-[rgb(10,10,10)] sticky top-0 flex items-center justify-between px-20 py-8 max-md:px-10 max-sm:px-5 max-md:py-7 w-full z-20">
+        <h1 class="text-gray-100 text-4xl font-bold max-md:text-3xl">ToDo<span class="text-green-400">App</span></h1>
+
+        <nav class="w-full max-w-[400px] text-white flex items-center justify-between gap-10 max-md:justify-end">
+            {% block nav %}
+            <ul class="flex items-center justify-between gap-4 max-md:hidden">
+                <a href="/login">
+                    <li class="px-5 py-2 text-white rounded cursor-pointer duration-100 hover:text-green-500">
+                        LogIn</li>
+                </a>
+                <a href="/registration">
+                    <li class="px-5 py-2 text-white rounded cursor-pointer duration-100 hover:text-green-500">
+                        SignUp</li>
+                </a>
+            </ul>
+            {% endblock %}
+            <ul>
+                <li>
+                    <i class="fa-solid fa-sun text-gray-100 text-3xl cursor-pointer duration-100 hover:text-gray-300"></i>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="px-20 py-5 min-h-[85vh] flex items-center max-md:px-10 max-sm:px-5">
+        {% block content %}
+        <section class="flex flex-col items-start gap-[50px] max-w-[50%] max-xl:max-w-[70%] max-md:max-w-full">
+            <h1 class="text-gray-100 text-8xl font-semibold max-lg:text-7xl max-sm:text-6xl">
+                <span class="text-green-400 ">Modern </span><br>to do <span
+                    class="underline decoration-green-400">App</span>
+            </h1>
+            <p class="text-gray-100 font-[200]">
+                On this site you will be able to add not only simple tasks. You can also keep diaries if you wish. You will see in the form of a chart how many tasks you have completed. You will receive
+                notifications by email.
+            </p>
+        </section>
+        {% endblock %}
+    </main>
+
+    {% include 'footer.html' %}
+</body>
+
+</html>

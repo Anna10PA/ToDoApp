@@ -1,0 +1,35 @@
+{% extends 'index.html' %}
+
+{% block nav %}
+<div class="flex justify-end items-center gap-[5px]">
+    <a href="{% url 'profile' %}">
+        <img src="https://i.pinimg.com/736x/19/e6/6e/19e66e7b54a1a06baea79eb1bb7cd725.jpg" alt=""
+            class="rounded-[50%] w-[50px] h-[50px] cursor-pointer">
+    </a>
+    <p>{{ username }}</p>
+</div>
+{% endblock %}
+{% block content %}
+<section class="flex items-center justify-between w-full flex-col h-[50vh]">
+    <div class="flex items-center gap-[10px] flex-col">
+        <h2 class="text-white text-6xl">Hello <span class="text-green-500">{{ name }}</span>! </h2>
+        <h4 class="text-gray-200">Choose your desired page</h4>
+    </div>
+    <section class="h-full text-white flex items-center justify-center w-full gap-[20px]">
+        <a href="{% url 'tasks' %}">
+            <div
+                class="hover:bg-red-500 text-red-500 duration-100 hover:text-white w-[150px] h-[150px] rounded border border-red-700 flex items-center justify-center text-xl cursor-pointer">
+                Tasks
+            </div>
+        </a>
+        <div
+            class="hover:bg-orange-500 text-orange-500 duration-100 hover:text-white w-[150px] h-[150px] rounded border border-orange-700 flex items-center justify-center text-xl translate-y-[20px] cursor-pointer">
+            Notes
+        </div>
+        <div
+            class="hover:bg-blue-500 text-blue-500 duration-100 hover:text-white w-[150px] h-[150px] rounded border border-blue-700 flex items-center justify-center text-xl translate-y-[-10px] cursor-pointer">
+            Users
+        </div>
+    </section>
+</section>
+{% endblock %}

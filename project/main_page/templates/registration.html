@@ -1,0 +1,21 @@
+{% extends 'index.html' %}
+
+{% block nav %}
+<a href="/" class="text-white flex items-center gap-2 hover:text-green-400">
+    <i class="fa-solid fa-arrow-left"></i>
+    <span>Back to Home</span>
+</a>
+{% endblock %}
+
+{% block content %}
+<section class="flex flex-col items-center w-full gap-[45px]">
+    <h1 class="text-green-400 font-bold text-5xl">Registration</h1>
+    <form class="text-white flex flex-col items-center gap-[10px]" method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ error }}
+        {{ message }}
+        <input type="submit" class="bg-green-500 text-black font-bold px-10 py-3 rounded cursor-pointer">
+    </form>
+</section>
+{% endblock %}

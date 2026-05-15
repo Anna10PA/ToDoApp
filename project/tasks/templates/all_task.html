@@ -1,0 +1,47 @@
+{% extends 'index.html' %}
+
+
+{% block content %}
+<section class="w-full flex flex-col items-center justify-between min-h-[80vh]">
+    {% include 'nav.html' %}
+    {% if tasks %}
+    <section class="w-full flex items-center h-[65vh]">
+        <ul class="flex items-start flex-col w-full gap-[15px] h-[60vh] overflow-y-auto"
+            style="scrollbar-width: none; -ms-overflow-style: none;">
+            {% for item in tasks %}
+            <li
+                class="{% if item.completed_time %} border border-green-800 text-green-500 rounded-lg hover:bg-green-500 hover:text-black  {% else %} border border-blue-800 text-blue-500 rounded-lg hover:bg-blue-700 hover:text-black {% endif %} duration-200 px-10 py-4 w-full hover:translate-y-[3px] cursor-pointer flex items-center justify-between gap-[10px]">
+                <p>
+                    {{ item.tasks }}
+                </p>
+                <div class="flex items-center gap-[10px] group {% if item.completed_time %} text-green-700 {% else %} text-blue-900 {% endif %} duration-200 cursor-pointer justify-between gap-[10px]">
+                    <i class="fa-solid fa-pen-to-square text-xl duration-100 hover:text-orange-700"></i>
+                    <a href="/tasks/delete/{{ item.id }}">
+                        <i class="fa-solid fa-trash text-xl duration-100 hover:text-red-700"></i>
+                    </a>
+                    <form action="/tasks/completed/{{ item.id }}" method="POST">
+                        {% csrf_token %}
+                        <label class="relative flex items-center cursor-pointer justify-center">
+                            <input type="checkbox"
+                                class="peer appearance-none w-[23px] h-[23px] border-2 border-blue-900 rounded checked:bg-none checked:border-green-700 transition-all"
+                                onchange="this.form.submit()" {% if item.completed_time %} checked {% endif %}>
+                            <i
+                                class="fa-solid fa-check absolute opacity-0 peer-checked:opacity-100 text-white left-1.3 text-sm transition-all font-[900] "></i>
+                        </label>
+                    </form>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        <div class="w-[55%]">
+
+        </div>
+    </section>
+    {% else %}
+    <div class="w-full h-[70vh] flex items-center justify-center flex-col gap-[15px]">
+        <h2 class="text-white text-5xl">You have not added a task</h2>
+        <h4 class="text-green-300"> Add a task now</h4>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}
