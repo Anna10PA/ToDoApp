@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from .forms import taskForm
-from .models import task, delt
+from .models import task, delt, category
 from datetime import datetime
 
 # მთავარი გვერდი
 def tasks(req):
-    return render(req, 'tasks.html')
+    return render(req, 'tasks.html', {'category': list(category.objects.all().values())})
 
 # დავალების დამატება
 def add_new_task(req):
@@ -15,6 +15,7 @@ def add_new_task(req):
         if task_model.is_valid():
             item = task_model.save(commit=False)
             item.email = req.session['user'].get('email')
+            item.category = req.POST['select']
             item.save()
 
     return redirect('tasks')
@@ -92,3 +93,13 @@ def edit(req, id):
                 tsk.save()
                 return redirect('all')
             return render(req, 'all_task.html', {'message': 'Error'})
+        
+# კატეკორიებში დამატება
+def add_category(req):
+    if req.method == 'POST' and req.session.get('user'):
+        ctg = category.objects.filter(category = req.POST['category_name'], email = req.session.get('user')['email'])
+        if ctg.count() > 0:
+            return render(req, 'category.html', {'message': 'exist'})
+        else:
+            category(email=req.session.get('user')['email'], category=req.POST['category_name']).save()
+    return render(req, 'category.html')
