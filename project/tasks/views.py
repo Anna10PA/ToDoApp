@@ -75,3 +75,20 @@ def return_from_delete(req, id):
         tsk.delete()
 
     return redirect('del_page')
+
+# დაედითება
+def edit(req, id):
+    if req.session.get('user'):
+        tsk = task.objects.all().get(id=id)
+        user_tsk = list(filter(lambda u: u['email'] == req.session['user'].get('email'), list(task.objects.all().values())))
+        if req.method == 'GET':
+            return render(req, 'all_task.html', {
+            'tasks': user_tsk,
+            'is_edit': True
+            })
+        else:
+            if req.POST['value'].strip():
+                tsk.tasks = req.POST['value']
+                tsk.save()
+                return redirect('all')
+            return render(req, 'all_task.html', {'message': 'Error'})

@@ -1,11 +1,26 @@
 {% extends 'index.html' %}
 
-
 {% block content %}
 <section class="w-full flex flex-col items-center justify-between min-h-[80vh]">
     {% include 'nav.html' %}
     {% if tasks %}
-    <section class="w-full flex items-center h-[65vh]">
+
+    <section class="w-full flex items-center h-[65vh] ">
+        {% if is_edit %}
+        <div id="blur" class="text-white absolute z-20 w-[90%] h-[70vh] backdrop-blur-md flex items-center justify-center flex-col gap-[10px]">
+            <div class="bg-[rgb(10,10,10)] px-10 py-5 rounded w-max flex flex-col items-center gap-[15px] relative">
+                <h2 class="text-3xl ">Edit task</h2>
+                <form method="POST" class="flex items-center gap-[10px] ">
+                    <a href="/tasks/all/">
+                        <i class="fa-solid fa-x absolute top-5 right-5 cursor-pointer"></i>
+                    </a>
+                    {% csrf_token %}
+                    <input type="text" name="value" class="bg-black border border-gray-300 px-10 py-3 rounded" placeholder="New task...">
+                    <button type="submit" class="bg-green-500 text-white px-5 py-3 rounded " >Submit</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
         <ul class="flex items-start flex-col w-full gap-[15px] h-[60vh] overflow-y-auto"
             style="scrollbar-width: none; -ms-overflow-style: none;">
             {% for item in tasks %}
@@ -14,8 +29,11 @@
                 <p>
                     {{ item.tasks }}
                 </p>
-                <div class="flex items-center gap-[10px] group {% if item.completed_time %} text-green-700 {% else %} text-blue-900 {% endif %} duration-200 cursor-pointer justify-between gap-[10px]">
-                    <i class="fa-solid fa-pen-to-square text-xl duration-100 hover:text-orange-700"></i>
+                <div
+                    class="flex items-center gap-[10px] group {% if item.completed_time %} text-green-700 {% else %} text-blue-900 {% endif %} duration-200 cursor-pointer justify-between gap-[10px]">
+                    <a href="/tasks/edit/{{ item.id }}">
+                        <i class="fa-solid fa-pen-to-square text-xl duration-100 hover:text-orange-700" id="edit"></i>
+                    </a>
                     <a href="/tasks/delete/{{ item.id }}">
                         <i class="fa-solid fa-trash text-xl duration-100 hover:text-red-700"></i>
                     </a>
