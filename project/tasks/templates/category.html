@@ -1,7 +1,16 @@
 {% extends 'index.html' %}
 
-{% block content %}
+{% block nav %}
+<div class="flex justify-end items-center gap-[5px]">
+    <a href="{% url 'profile' %}">
+        <img src="https://i.pinimg.com/736x/19/e6/6e/19e66e7b54a1a06baea79eb1bb7cd725.jpg" alt=""
+            class="rounded-[50%] w-[50px] h-[50px] cursor-pointer">
+    </a>
+    <p>{{ username }}</p>
+</div>
+{% endblock %}
 
+{% block content %}
 <section class="h-[80vh] w-full flex items-center justify-center flex-col gap-[15px]">
     <h2 class="text-white text-5xl">Add <span class="text-green-400">New</span> Category</h2>
     <form class="w-full max-w-[500px] flex items-start gap-[5px]" method="POST">

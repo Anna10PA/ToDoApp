@@ -1,5 +1,15 @@
 {% extends 'index.html' %}
 
+<!-- {% block nav %}
+<div class="flex justify-end items-center gap-[5px]">
+    <a href="{% url 'profile' %}">
+        <img src="https://i.pinimg.com/736x/19/e6/6e/19e66e7b54a1a06baea79eb1bb7cd725.jpg" alt=""
+            class="rounded-[50%] w-[50px] h-[50px] cursor-pointer">
+    </a>
+    <p>{{ username }}</p>
+</div>
+{% endblock %} -->
+
 {% block content %}
 <section class="w-full flex flex-col items-center justify-between min-h-[80vh]">
     {% include 'nav.html' %}
@@ -7,7 +17,8 @@
 
     <section class="w-full flex items-center h-[65vh] ">
         {% if is_edit %}
-        <div id="blur" class="text-white absolute z-20 w-[90%] h-[70vh] backdrop-blur-md flex items-center justify-center flex-col gap-[10px]">
+        <div id="blur"
+            class="text-white absolute z-20 w-[90%] h-[70vh] backdrop-blur-md flex items-center justify-center flex-col gap-[10px]">
             <div class="bg-[rgb(10,10,10)] px-10 py-5 rounded w-max flex flex-col items-center gap-[15px] relative">
                 <h2 class="text-3xl ">Edit task</h2>
                 <form method="POST" class="flex items-center gap-[10px] ">
@@ -15,8 +26,9 @@
                         <i class="fa-solid fa-x absolute top-5 right-5 cursor-pointer"></i>
                     </a>
                     {% csrf_token %}
-                    <input type="text" name="value" class="bg-black border border-gray-300 px-10 py-3 rounded" placeholder="New task...">
-                    <button type="submit" class="bg-green-500 text-white px-5 py-3 rounded " >Submit</button>
+                    <input type="text" name="value" class="bg-black border border-gray-300 px-10 py-3 rounded"
+                        placeholder="New task...">
+                    <button type="submit" class="bg-green-500 text-white px-5 py-3 rounded ">Submit</button>
                 </form>
             </div>
         </div>

@@ -1,10 +1,17 @@
 {% extends 'index.html' %}
 
+{% block nav %}
+<div class="flex justify-end items-center gap-[5px]">
+    <a href="{% url 'profile' %}">
+        <img src="https://i.pinimg.com/736x/19/e6/6e/19e66e7b54a1a06baea79eb1bb7cd725.jpg" alt=""
+            class="rounded-[50%] w-[50px] h-[50px] cursor-pointer">
+    </a>
+    <p>{{ username }}</p>
+</div>
+{% endblock %}
 
 {% block content %}
 <section class="h-[80vh] w-full flex items-center justify-between flex-col pb-5">
-
-    {% include 'nav.html' %}
     {% if tasks %}
     <ul class="flex items-start flex-col w-full gap-[15px] h-[55vh] overflow-y-auto"
         style="scrollbar-width: none; -ms-overflow-style: none;">
@@ -14,7 +21,8 @@
             <p>
                 {{item.tasks}}
             </p>
-            <div class="flex items-center gap-[10px] group {% if item.completed_time %} text-green-700 {% else %} text-blue-900 {% endif %} duration-200 cursor-pointer justify-between gap-[15px]">
+            <div
+                class="flex items-center gap-[10px] group {% if item.completed_time %} text-green-700 {% else %} text-blue-900 {% endif %} duration-200 cursor-pointer justify-between gap-[15px]">
                 <a href="/tasks/return_from_delete/{{ item.id }}">
                     <i class="fa-solid fa-arrow-left text-xl duration-100 hover:text-orange-800"></i>
                 </a>
