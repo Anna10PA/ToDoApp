@@ -5,7 +5,8 @@ from datetime import datetime
 
 # მთავარი გვერდი
 def tasks(req):
-    return render(req, 'tasks.html', {'category': list(category.objects.all().values())})
+    if req.session.get('user'):
+        return render(req, 'tasks.html', {'category': list(filter(lambda ctg: ctg.get('email') == req.session.get('user').get('email'), list(category.objects.all().values())))})
 
 # დავალების დამატება
 def add_new_task(req):
@@ -94,12 +95,54 @@ def edit(req, id):
                 return redirect('all')
             return render(req, 'all_task.html', {'message': 'Error'})
         
-# კატეკორიებში დამატება
+# კატეgორიებში დამატება
 def add_category(req):
     if req.method == 'POST' and req.session.get('user'):
-        ctg = category.objects.filter(category = req.POST['category_name'], email = req.session.get('user')['email'])
-        if ctg.count() > 0:
-            return render(req, 'category.html', {'message': 'exist'})
+        if len(req.POST['category_name'].strip()) > 0:
+            ctg = category.objects.filter(category = req.POST['category_name'].strip(), email = req.session.get('user')['email'])
+            if ctg.count() > 0:
+                return render(req, 'category.html', {'message': 'exist'})
+            else:
+                category(email=req.session.get('user')['email'], category=req.POST['category_name'].strip()).save()
         else:
-            category(email=req.session.get('user')['email'], category=req.POST['category_name']).save()
+            return render(req, 'category.html', {'message': 'must contain value'})
     return render(req, 'category.html')
+
+# ყველა კატეგორიის ნახვა
+def view_category(req):
+    if req.session.get('user') :
+        all_tsk = list(task.objects.filter(email = req.session.get('user').get('email')).values())
+        is_asc = False
+        
+        obj = {}
+        for tsk in all_tsk:
+            if obj.get(tsk.get('category')):
+               obj.get(tsk.get('category')).append(tsk.get('tasks'))
+            else:
+                obj[tsk['category']] = [tsk.get('tasks')] 
+
+        for ctg in list(category.objects.all().values()):
+            if ctg.get('category') not in obj.keys():
+                obj[ctg.get('category')] = []
+
+        if req.method == 'POST' :
+            if 'asc' in req.POST: 
+                obj = dict(sorted(obj.items()))
+                is_asc = True
+            else:
+                obj = dict(sorted(obj.items(), reverse=True))
+                is_asc = False
+
+        return render(req, 'view_category.html', {
+            'category': obj, 
+            'tasks': all_tsk,
+            'is_asc': is_asc
+        })
+    
+# კატეგორიების წაშლა
+def delete_category(req, ctg):
+    print(ctg)
+    if req.session.get('user'):
+        category.objects.get(category=str(ctg)).delete()
+        task.objects.filter(category=str(ctg)).delete()
+        return redirect('view_category')

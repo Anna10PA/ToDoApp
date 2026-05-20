@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import tasks, add_new_task, all_tasks, delete, del_page, delete_all, delete_from_delete, completed, return_from_delete, edit, add_category
+from .views import tasks, add_new_task, all_tasks, delete, del_page, delete_all, delete_from_delete, completed, return_from_delete, edit, add_category, view_category, delete_category
 
 
 urlpatterns = [
@@ -13,5 +13,7 @@ urlpatterns = [
     path('completed/<int:id>', completed, name='completed'),
     path('return_from_delete/<int:id>', return_from_delete, name='return_from_delete'),
     path('edit/<int:id>', edit, name='edit'),
-    path('add_category/', add_category, name='add_category')
+    path('add_category/', add_category, name='add_category'),
+    path('view_category/', view_category, name='view_category'),
+    path('delete_category/<str:ctg>', delete_category, name='delete_category')
 ]

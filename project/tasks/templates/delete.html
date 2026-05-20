@@ -1,5 +1,4 @@
 {% extends 'index.html' %}
-
 {% block nav %}
 <div class="flex justify-end items-center gap-[5px]">
     <a href="{% url 'profile' %}">
@@ -12,6 +11,8 @@
 
 {% block content %}
 <section class="h-[80vh] w-full flex items-center justify-between flex-col pb-5">
+    {% include 'nav.html' %}
+
     {% if tasks %}
     <ul class="flex items-start flex-col w-full gap-[15px] h-[55vh] overflow-y-auto"
         style="scrollbar-width: none; -ms-overflow-style: none;">

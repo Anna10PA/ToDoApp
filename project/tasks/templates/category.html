@@ -11,10 +11,21 @@
 {% endblock %}
 
 {% block content %}
-<section class="h-[80vh] w-full flex items-center justify-center flex-col gap-[15px]">
+<section class="h-[80vh] w-full flex items-center justify-center flex-col gap-[15px] relative ">
+    <div class="flex items-center justify-between gap-[20px] absolute top-0 right-0">
+        <a href="/tasks/" class="text-white flex items-center gap-2 hover:text-green-400">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Back to tasks</span>
+        </a>
+    </div>
     <h2 class="text-white text-5xl">Add <span class="text-green-400">New</span> Category</h2>
     <form class="w-full max-w-[500px] flex items-start gap-[5px]" method="POST">
         {% csrf_token %}
+        <a href="/tasks/view_category">
+            <div class="text-white text-2xl bg-green-500 rounded flex items-center justify-center py-3 px-3 duration-100 hover:bg-green-700 cursor-pointer">
+                <i class="fa-solid fa-chart-gantt"></i>
+            </div>
+        </a>
         <div class="flex flex-col items-start gap-[5px] w-full">
             <input type="text" placeholder="New Category..."
                 class="px-6 py-3 rounded border-green-500 border bg-black outline-green-300 text-white w-full"

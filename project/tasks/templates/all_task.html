@@ -1,6 +1,6 @@
 {% extends 'index.html' %}
 
-<!-- {% block nav %}
+{% block nav %}
 <div class="flex justify-end items-center gap-[5px]">
     <a href="{% url 'profile' %}">
         <img src="https://i.pinimg.com/736x/19/e6/6e/19e66e7b54a1a06baea79eb1bb7cd725.jpg" alt=""
@@ -8,13 +8,13 @@
     </a>
     <p>{{ username }}</p>
 </div>
-{% endblock %} -->
+{% endblock %}
 
 {% block content %}
 <section class="w-full flex flex-col items-center justify-between min-h-[80vh]">
+
     {% include 'nav.html' %}
     {% if tasks %}
-
     <section class="w-full flex items-center h-[65vh] ">
         {% if is_edit %}
         <div id="blur"
