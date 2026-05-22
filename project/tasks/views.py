@@ -24,7 +24,18 @@ def add_new_task(req):
 # ყველა დავალების ნახვა
 def all_tasks(req):
     user_tsk = list(filter(lambda u: u['email'] == req.session['user'].get('email'), list(task.objects.all().values())))
-    return render(req, 'all_task.html', {'tasks': user_tsk})
+    filter_value = '' 
+
+    if req.method == 'POST':
+        if req.POST['category_filter'].strip() and req.POST['category_filter'].strip() != 'All':
+            user_tsk = task.objects.filter(category=req.POST['category_filter'])
+            filter_value = req.POST['category_filter']
+     
+    return render(req, 'all_task.html', {
+        'tasks': user_tsk,
+        'category': category.objects.all().values(),
+        'filter_value': filter_value
+        })
 
 # წაშლა დავალებებიდან
 def delete(req, id):
@@ -95,7 +106,7 @@ def edit(req, id):
                 return redirect('all')
             return render(req, 'all_task.html', {'message': 'Error'})
         
-# კატეgორიებში დამატება
+# კატეგორიებში დამატება
 def add_category(req):
     if req.method == 'POST' and req.session.get('user'):
         if len(req.POST['category_name'].strip()) > 0:
@@ -141,8 +152,60 @@ def view_category(req):
     
 # კატეგორიების წაშლა
 def delete_category(req, ctg):
-    print(ctg)
     if req.session.get('user'):
         category.objects.get(category=str(ctg)).delete()
         task.objects.filter(category=str(ctg)).delete()
         return redirect('view_category')
+    
+# კატეგორიების ედითი
+def edit_category(req, ctg):
+    if req.session.get('user'):
+        main_category = category.objects.get(category=str(ctg))
+        all_ctg = category.objects.all().values()
+        all_tsk = task.objects.filter(category = ctg)
+        
+        if req.method == 'POST':
+            if req.POST['value'].strip():
+                main_category.category = req.POST['value']
+
+                main_category.save()
+                all_tsk.update(category = req.POST['value'])
+
+                return redirect('view_category')
+       
+        else:
+            return render(req, 'view_category.html', {
+            'category': all_ctg,
+            'is_edit': True
+            })
+    else:
+        return redirect('tasks')
+    
+# ინფორმაცია
+def view_task(req, id):
+    if req.session.get('user'):
+        try:
+            tsk = task.objects.get(id = id)
+            page = 'all_task.html'
+        except:
+            tsk = delt.objects.get(id = id)
+            page = 'delete.html'
+
+        tasks = task.objects.all().values()
+        all_ctg = category.objects.all().values()
+
+        if req.method == 'POST':
+            new_ctg = req.POST['new_category']
+            tsk.category = new_ctg
+            tsk.save()
+
+        return render(req, page, {
+            'task': tsk,
+            'is_open': True,
+            'tasks': tasks,
+            'category': all_ctg
+        })
+    
+# 
+# def filter_tsks(req, ctg):
+#     if req.session.get('user'):

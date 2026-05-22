@@ -12,8 +12,8 @@
 
 {% block content %}
 <section class="w-full flex flex-col items-center justify-between min-h-[80vh]">
-
     {% include 'nav.html' %}
+
     {% if tasks %}
     <section class="w-full flex items-center h-[65vh] ">
         {% if is_edit %}
@@ -33,14 +33,48 @@
             </div>
         </div>
         {% endif %}
+        {% if is_open %}
+        <div class="backdrop-blur-md w-[85%] h-screen z-[100] absolute top-0 flex flex-col items-center justify-center">
+            <div class="bg-gray-800 flex flex-col w-max px-10 py-5 items-center justify-center gap-4 rounded relative">
+                <a href="/tasks/all/" class="text-white absolute top-4 right-5 duration-100 hover:text-gray-300">
+                    <i class="fa-solid fa-x"></i>
+                </a>
+                <p class="text-gray-300 text-3xl">№ {{task.id}} </p>
+                <p class="text-white text-center w-full">{{ task.tasks }}</p>
+                <ul class="text-white text-sm flex flex-col flex items-start gap-[3px]">
+                    <li>Add time: {{ task.add_time }}</li>
+                    <li>Completed: {{ task.completed_time }}</li>
+                    {% if task.deleted_time %}
+                    <li>Deleted_time: {{ task.deleted_time }}</li>
+                    {% endif %}
+                    <li>Deadline: {{ task.deadline_time }}</li>
+                </ul>
+                <form action="/tasks/view/{{ task.id }}" method="POST">
+                    {% csrf_token %}
+                    <select name="new_category" id=""
+                        class="border-gray-500 px-5 py-2 rounded bg-gray-800 border outline-none text-gray-500 cursor-pointer duration-100 hover:bg-gray-700"  onchange="this.form.submit()">
+                        {% for ctg in category %}
+                        <option value="{{ ctg.category }}" {% if ctg.category == task.category %} selected {% endif %} >
+                            {{ctg.category}}</option>
+                        {% endfor %}
+                        <option value="Default" {% if "Default" == task.category %} selected {% endif %}>Default</option>
+                    </select>
+
+                </form>
+            </div>
+
+        </div>
+        {% endif %}
         <ul class="flex items-start flex-col w-full gap-[15px] h-[60vh] overflow-y-auto"
             style="scrollbar-width: none; -ms-overflow-style: none;">
             {% for item in tasks %}
             <li
                 class="{% if item.completed_time %} border border-green-800 text-green-500 rounded-lg hover:bg-green-500 hover:text-black  {% else %} border border-blue-800 text-blue-500 rounded-lg hover:bg-blue-700 hover:text-black {% endif %} duration-200 px-10 py-4 w-full hover:translate-y-[3px] cursor-pointer flex items-center justify-between gap-[10px]">
-                <p>
-                    {{ item.tasks }}
-                </p>
+                <a href="/tasks/view/{{ item.id }}">
+                    <p>
+                        {{ item.tasks }}
+                    </p>
+                </a>
                 <div
                     class="flex items-center gap-[10px] group {% if item.completed_time %} text-green-700 {% else %} text-blue-900 {% endif %} duration-200 cursor-pointer justify-between gap-[10px]">
                     <a href="/tasks/edit/{{ item.id }}">
@@ -63,9 +97,21 @@
             </li>
             {% endfor %}
         </ul>
-        <div class="w-[55%]">
-
-        </div>
+        <form class="w-[55%] flex items-center justify-between text-white" method="POST" action="/tasks/all/">
+            {% csrf_token %}
+            <ul>
+                <li>all</li>
+                <li>Comp</li>
+                <li>Uncomp</li>
+            </ul>
+            <select name="category_filter" id="" class="bg-black border px-5 py-2 rounded text-gray-300 outline-none cursor-pointer hover:bg-gray-800 duration-100 border-gray-900" onchange="this.form.submit()">
+                {% for ctg in category %}
+                <option value="{{ctg.category}}" {% if ctg.category == filter_value %} selected {% endif %}>{{ ctg.category }}</option>
+                {% endfor %}
+                <option value="Default" {% if filter_value == 'Default' %} selected {% endif %}>Default</option>
+                <option value="All" {% if not filter_value %} selected {% endif %}>All</option>
+            </select> 
+        </form>
     </section>
     {% else %}
     <div class="w-full h-[70vh] flex items-center justify-center flex-col gap-[15px]">
