@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+{% block content %}
+<section
+    class="flex items-center justify-center h-[85vh] w-full px-20 py-8 max-md:px-10 max-sm:px-5 max-md:py-7 flex-col gap-[20px]">
+    <h1 class="text-5xl text-white">Enter <span class="text-[rgb(167,139,250)]">Code</span></h1>
+    <form class="flex items-center gap-[10px] w-full max-w-[700px] max-md:flex-col " method="POST">
+        {% csrf_token %}
+        <input type="text" placeholder="Code...."
+            class="px-6 py-3 rounded border-[rgb(167,139,250)] border bg-black outline-[rgb(167,139,250)] text-white w-full"
+            name="code" required>
+        <button type="submit"
+            class="text-white bg-[rgb(167,139,250)] px-5 py-3 rounded duration-100 hover:bg-[rgb(167,139,250)] flex items-center gap-[10px] max-md:w-full justify-center">
+            <p>Send</p> <i class="fa-regular fa-envelope translate-y-[1px] "></i>
+        </button>
+    </form>
+    <p class="text-red-500">{{message}}</p>
+</section>
+{% endblock %}

@@ -6,117 +6,132 @@
         <img src="https://i.pinimg.com/736x/19/e6/6e/19e66e7b54a1a06baea79eb1bb7cd725.jpg" alt=""
             class="rounded-[50%] w-[50px] h-[50px] cursor-pointer">
     </a>
-    <p>{{ username }}</p>
+    <p class="text-white">{{ username }}</p>
 </div>
 {% endblock %}
 
 {% block content %}
-<section class="w-full flex flex-col items-center justify-between min-h-[80vh]">
+<section class="w-full flex flex-col items-center min-h-[80vh] relative px-20 py-8 max-md:px-10 max-sm:px-5 max-md:py-7">
     {% include 'nav.html' %}
 
-    {% if tasks %}
-    <section class="w-full flex items-center h-[65vh] ">
-        {% if is_edit %}
-        <div id="blur"
-            class="text-white absolute z-20 w-[90%] h-[70vh] backdrop-blur-md flex items-center justify-center flex-col gap-[10px]">
-            <div class="bg-[rgb(10,10,10)] px-10 py-5 rounded w-max flex flex-col items-center gap-[15px] relative">
-                <h2 class="text-3xl ">Edit task</h2>
-                <form method="POST" class="flex items-center gap-[10px] ">
-                    <a href="/tasks/all/">
-                        <i class="fa-solid fa-x absolute top-5 right-5 cursor-pointer"></i>
-                    </a>
-                    {% csrf_token %}
-                    <input type="text" name="value" class="bg-black border border-gray-300 px-10 py-3 rounded"
-                        placeholder="New task...">
-                    <button type="submit" class="bg-green-500 text-white px-5 py-3 rounded ">Submit</button>
-                </form>
-            </div>
-        </div>
-        {% endif %}
-        {% if is_open %}
-        <div class="backdrop-blur-md w-[85%] h-screen z-[100] absolute top-0 flex flex-col items-center justify-center">
-            <div class="bg-gray-800 flex flex-col w-max px-10 py-5 items-center justify-center gap-4 rounded relative">
-                <a href="/tasks/all/" class="text-white absolute top-4 right-5 duration-100 hover:text-gray-300">
-                    <i class="fa-solid fa-x"></i>
-                </a>
-                <p class="text-gray-300 text-3xl">№ {{task.id}} </p>
-                <p class="text-white text-center w-full">{{ task.tasks }}</p>
-                <ul class="text-white text-sm flex flex-col flex items-start gap-[3px]">
-                    <li>Add time: {{ task.add_time }}</li>
-                    <li>Completed: {{ task.completed_time }}</li>
-                    {% if task.deleted_time %}
-                    <li>Deleted_time: {{ task.deleted_time }}</li>
-                    {% endif %}
-                    <li>Deadline: {{ task.deadline_time }}</li>
-                </ul>
-                <form action="/tasks/view/{{ task.id }}" method="POST">
-                    {% csrf_token %}
-                    <select name="new_category" id=""
-                        class="border-gray-500 px-5 py-2 rounded bg-gray-800 border outline-none text-gray-500 cursor-pointer duration-100 hover:bg-gray-700"  onchange="this.form.submit()">
-                        {% for ctg in category %}
-                        <option value="{{ ctg.category }}" {% if ctg.category == task.category %} selected {% endif %} >
-                            {{ctg.category}}</option>
-                        {% endfor %}
-                        <option value="Default" {% if "Default" == task.category %} selected {% endif %}>Default</option>
-                    </select>
+    {% if tasks or filter_value != 'All' or filter_completed %}
+    <div class="w-full flex flex-col gap-6 mt-6">
+        
+        <div class="flex items-center justify-between w-full bg-gray-900 p-4 rounded-lg gap-4">
+            
+            <form action="/tasks/completed_tasks/" method="POST" class="flex items-center gap-2">
+                {% csrf_token %}
+                <label class="relative flex items-center cursor-pointer justify-center text-white gap-2">
+                    <input type="checkbox"
+                        name="completed"
+                        class="peer appearance-none w-[23px] h-[23px] border-2 border-blue-900 rounded checked:bg-none checked:border-green-700 transition-all"
+                        onchange="this.form.submit()"
+                        {% if filter_completed %} checked {% endif %}>
+                    <i class="fa-solid fa-check absolute opacity-0 peer-checked:opacity-100 text-white text-sm transition-all font-[900]"></i>
+                    <span class="text-sm text-gray-300 ml-6">Show Completed</span>
+                </label>
+            </form>
 
-                </form>
-            </div>
-
+            <form class="flex items-center text-white" method="POST" action="/tasks/all/">
+                {% csrf_token %}
+                <select name="category_filter"
+                    class="bg-black border px-5 py-2 rounded text-gray-300 outline-none cursor-pointer hover:bg-gray-800 duration-100 border-gray-700"
+                    onchange="this.form.submit()">
+                    {% for ctg in category %}
+                    <option value="{{ ctg.category }}" {% if ctg.category == filter_value %} selected {% endif %}>{{ ctg.category }}</option>
+                    {% endfor %}
+                    <option value="Default" {% if filter_value == 'Default' %} selected {% endif %}>Default</option>
+                    <option value="All" {% if filter_value == 'All' or not filter_value %} selected {% endif %}>All</option>
+                </select>
+            </form>
         </div>
-        {% endif %}
-        <ul class="flex items-start flex-col w-full gap-[15px] h-[60vh] overflow-y-auto"
-            style="scrollbar-width: none; -ms-overflow-style: none;">
+
+        <ul class="flex flex-col w-full gap-[15px] max-h-[55vh] overflow-y-auto pr-2" style="scrollbar-width: thin;">
             {% for item in tasks %}
-            <li
-                class="{% if item.completed_time %} border border-green-800 text-green-500 rounded-lg hover:bg-green-500 hover:text-black  {% else %} border border-blue-800 text-blue-500 rounded-lg hover:bg-blue-700 hover:text-black {% endif %} duration-200 px-10 py-4 w-full hover:translate-y-[3px] cursor-pointer flex items-center justify-between gap-[10px]">
-                <a href="/tasks/view/{{ item.id }}">
-                    <p>
+            <li class="duration-200 px-6 py-4 rounded-lg w-full flex items-center justify-between gap-[10px] {% if item.completed_time %} border border-green-800 text-green-500 hover:bg-green-950 {% else %} border border-blue-800 text-blue-500 backdrop-blur-md hover:bg-blue-950 {% endif %}">
+                <a href="/tasks/view/{{ item.id }}" class="flex-1 min-w-0">
+                    <p class="break-words {% if item.completed_time %} line-through opacity-60 {% endif %}">
                         {{ item.tasks }}
                     </p>
                 </a>
-                <div
-                    class="flex items-center gap-[10px] group {% if item.completed_time %} text-green-700 {% else %} text-blue-900 {% endif %} duration-200 cursor-pointer justify-between gap-[10px]">
+                
+                <div class="flex items-center gap-[15px] shrink-0">
                     <a href="/tasks/edit/{{ item.id }}">
-                        <i class="fa-solid fa-pen-to-square text-xl duration-100 hover:text-orange-700" id="edit"></i>
+                        <i class="fa-solid fa-pen-to-square text-xl duration-100 hover:text-orange-500"></i>
                     </a>
                     <a href="/tasks/delete/{{ item.id }}">
-                        <i class="fa-solid fa-trash text-xl duration-100 hover:text-red-700"></i>
+                        <i class="fa-solid fa-trash text-xl duration-100 hover:text-red-500"></i>
                     </a>
-                    <form action="/tasks/completed/{{ item.id }}" method="POST">
+                    <form action="/tasks/completed/{{ item.id }}" method="POST" class="flex items-center">
                         {% csrf_token %}
                         <label class="relative flex items-center cursor-pointer justify-center">
                             <input type="checkbox"
                                 class="peer appearance-none w-[23px] h-[23px] border-2 border-blue-900 rounded checked:bg-none checked:border-green-700 transition-all"
                                 onchange="this.form.submit()" {% if item.completed_time %} checked {% endif %}>
-                            <i
-                                class="fa-solid fa-check absolute opacity-0 peer-checked:opacity-100 text-white left-1.3 text-sm transition-all font-[900] "></i>
+                            <i class="fa-solid fa-check absolute opacity-0 peer-checked:opacity-100 text-white text-sm transition-all font-[900]"></i>
                         </label>
                     </form>
                 </div>
             </li>
+            {% empty %}
+            <div class="text-center py-10">
+                <p class="text-gray-400 text-xl">No tasks found matching the filters.</p>
+            </div>
             {% endfor %}
         </ul>
-        <form class="w-[55%] flex items-center justify-between text-white" method="POST" action="/tasks/all/">
-            {% csrf_token %}
-            <ul>
-                <li>all</li>
-                <li>Comp</li>
-                <li>Uncomp</li>
+    </div>
+
+    {% if is_edit %}
+    <div id="blur" class="fixed inset-0 z-50 text-white backdrop-blur-md flex items-center justify-center bg-black/40">
+        <div class="bg-[rgb(10,10,10)] border border-gray-800 px-10 py-6 rounded-lg w-full max-w-[450px] flex flex-col items-center gap-[15px] relative shadow-2xl">
+            <h2 class="text-3xl font-semibold">Edit task</h2>
+            <a href="/tasks/all/" class="absolute top-5 right-5 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-x cursor-pointer"></i>
+            </a>
+            <form method="POST" class="flex flex-col sm:flex-row items-center gap-[10px] w-full mt-2">
+                {% csrf_token %}
+                <input type="text" name="value" class="bg-black border border-gray-700 px-4 py-3 rounded w-full outline-none focus:border-green-500" placeholder="New task...">
+                <button type="submit" class="bg-green-500 hover:bg-green-600 text-white px-5 py-3 rounded w-full sm:w-auto font-medium duration-100">Submit</button>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if is_open %}
+    <div class="fixed inset-0 z-50 text-white backdrop-blur-md flex items-center justify-center bg-black/40">
+        <div class="bg-gray-800 border border-gray-700 flex flex-col w-full max-w-[450px] px-8 py-6 items-center justify-center gap-4 rounded-lg relative shadow-2xl">
+            <a href="/tasks/all/" class="text-gray-400 absolute top-5 right-5 duration-100 hover:text-white">
+                <i class="fa-solid fa-x"></i>
+            </a>
+            <p class="text-gray-400 text-2xl font-mono">№ {{task.id}}</p>
+            <p class="text-white text-center w-full text-lg font-medium break-words px-2">{{ task.tasks }}</p>
+            
+            <ul class="text-gray-300 text-sm flex flex-col items-start gap-[6px] w-full bg-gray-900/50 p-4 rounded-lg my-2">
+                <li><strong class="text-gray-400">Added:</strong> {{ task.add_time }}</li>
+                <li><strong class="text-gray-400">Completed:</strong> {{ task.completed_time|default:"Not completed yet" }}</li>
+                {% if task.deleted_time %}
+                <li><strong class="text-gray-400">Deleted:</strong> {{ task.deleted_time }}</li>
+                {% endif %}
+                <li><strong class="text-gray-400">Deadline:</strong> {{ task.deadline_time }}</li>
             </ul>
-            <select name="category_filter" id="" class="bg-black border px-5 py-2 rounded text-gray-300 outline-none cursor-pointer hover:bg-gray-800 duration-100 border-gray-900" onchange="this.form.submit()">
-                {% for ctg in category %}
-                <option value="{{ctg.category}}" {% if ctg.category == filter_value %} selected {% endif %}>{{ ctg.category }}</option>
-                {% endfor %}
-                <option value="Default" {% if filter_value == 'Default' %} selected {% endif %}>Default</option>
-                <option value="All" {% if not filter_value %} selected {% endif %}>All</option>
-            </select> 
-        </form>
-    </section>
+            
+            <form action="/tasks/view/{{ task.id }}" method="POST" class="w-full">
+                {% csrf_token %}
+                <select name="new_category" class="w-full border-gray-600 px-4 py-2 rounded bg-gray-900 border outline-none text-gray-300 cursor-pointer duration-100 hover:bg-gray-700" onchange="this.form.submit()">
+                    {% for ctg in category %}
+                    <option value="{{ ctg.category }}" {% if ctg.category == task.category %} selected {% endif %}>{{ ctg.category }}</option>
+                    {% endfor %}
+                    <option value="Default" {% if "Default" == task.category %} selected {% endif %}>Default</option>
+                </select>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
     {% else %}
     <div class="w-full h-[70vh] flex items-center justify-center flex-col gap-[15px]">
-        <h2 class="text-white text-5xl">You have not added a task</h2>
-        <h4 class="text-green-300"> Add a task now</h4>
+        <h2 class="text-white text-5xl font-bold">You have not added a task</h2>
+        <h4 class="text-green-400 text-xl font-medium animate-pulse">Add a task now</h4>
     </div>
     {% endif %}
 </section>

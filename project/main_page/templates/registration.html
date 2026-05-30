@@ -1,21 +1,25 @@
 {% extends 'index.html' %}
 
 {% block nav %}
-<a href="/" class="text-white flex items-center gap-2 hover:text-green-400">
+<a href="/" class="text-white flex items-center gap-2 hover:text-[rgb(167,139,250)]">
     <i class="fa-solid fa-arrow-left"></i>
     <span>Back to Home</span>
 </a>
 {% endblock %}
 
 {% block content %}
-<section class="flex flex-col items-center w-full gap-[45px]">
-    <h1 class="text-green-400 font-bold text-5xl">Registration</h1>
+<section class="flex flex-col items-center w-full gap-[45px] min-h-[80vh] justify-center">
+    <h1 class="text-[rgb(167,139,250)] font-bold text-5xl">Registration</h1>
     <form class="text-white flex flex-col items-center gap-[10px]" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         {{ error }}
         {{ message }}
-        <input type="submit" class="bg-green-500 text-black font-bold px-10 py-3 rounded cursor-pointer">
+        <input type="submit" class="bg-[rgb(167,139,250)] text-black font-bold px-10 py-3 rounded cursor-pointer">
+        <p class="translate-y-[20px]">
+            Do you have an account? Then
+            <a href="{% url 'login' %}" class="text-[rgb(167,139,250)] underline">Log in</a>
+        </p>
     </form>
 </section>
 {% endblock %}

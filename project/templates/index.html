@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,50 +8,95 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/b2005d7310.js" crossorigin="anonymous"></script>
     <title>To Do App</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 
-<body class="bg-black relative">
+<body class="relative margin-0 bg-gradient-to-b from-[rgb(0,0,4)] to-black w-full ">
     <header
-        class="bg-[rgb(10,10,10)] sticky top-0 flex items-center justify-between px-20 py-8 max-md:px-10 max-sm:px-5 max-md:py-7 w-full z-[400]">
-        <h1 class="text-gray-100 text-4xl font-bold max-md:text-3xl">ToDo<span class="text-green-400">App</span></h1>
-
-        <nav class="w-full max-w-[400px] text-white flex items-center justify-between gap-10 max-md:justify-end">
+        class="backdrop-blur-[3px] sticky top-0 flex items-center justify-between px-20 py-8 max-md:px-10 max-sm:px-5 max-md:py-7 w-full z-[400] border border-b-[rgba(167,139,250,0.1)] border-r-black">
+        <h1 class="text-gray-100 text-4xl font-bold max-md:text-3xl">
+            ToDo<span class="text-[rgba(167,139,250,1)]">App</span>
+        </h1>
+        <nav class="max-w-[400px] text-white flex items-center justify-between gap-10 max-md:justify-end">
             {% block nav %}
             <ul class="flex items-center justify-between gap-4 max-md:hidden">
                 <a href="/login">
-                    <li class="px-5 py-2 text-white rounded cursor-pointer duration-100 hover:text-green-500">
+                    <li class="px-5 py-2 text-white rounded cursor-pointer duration-100 hover:text-[rgb(167,139,250)]">
                         LogIn</li>
                 </a>
                 <a href="/registration">
-                    <li class="px-5 py-2 text-white rounded cursor-pointer duration-100 hover:text-green-500">
+                    <li class="px-5 py-2 text-white rounded cursor-pointer duration-100 hover:text-[rgb(167,139,250)]">
                         SignUp</li>
                 </a>
             </ul>
+            
             {% endblock %}
-            <ul>
+            <!-- <ul>
                 <li>
-                    <i class="fa-solid fa-sun text-gray-100 text-3xl cursor-pointer duration-100 hover:text-gray-300"></i>
+                    <i
+                        class="fa-solid fa-sun text-gray-100 text-3xl cursor-pointer duration-100 hover:text-gray-300"></i>
                 </li>
-            </ul>
+            </ul> -->
         </nav>
     </header>
 
-    <main class="px-20 py-5 min-h-[85vh] h-full flex items-center max-md:px-10 max-sm:px-5">
+    <main class="min-h-[85vh] h-full flex items-center flex-col w-full">
         {% block content %}
-        <section class="flex flex-col items-start gap-[50px] max-w-[50%] max-xl:max-w-[70%] max-md:max-w-full">
-            <h1 class="text-gray-100 text-8xl font-semibold max-lg:text-7xl max-sm:text-6xl">
-                <span class="text-green-400 ">Modern </span><br>to do <span
-                    class="underline decoration-green-400">App</span>
+        <section class="flex flex-col items-start gap-[50px] justify-center h-[83vh] w-full px-20 py-5  max-md:px-10 max-sm:px-5 ">
+            <h1 class="text-gray-100 text-8xl max-lg:text-7xl max-sm:text-6xl font-bold">
+                <span class="text-[rgba(167,139,250,0.5)] ">Modern </span><br>to do <span
+                    class="underline decoration-[rgba(167,139,250,0.5)] ">App</span>
             </h1>
             <p class="text-gray-100 font-[200]">
-                On this site you will be able to add not only simple tasks. You can also keep diaries if you wish. You will see in the form of a chart how many tasks you have completed. You will receive
-                notifications by email.
+                Add tasks, keep diaries, track your progress with charts, and receive email notifications — all in one
+                place.
             </p>
+            <div class="flex items-center gap-7 max-md:flex-col max-md:gap-3 max-md:items-start">
+                <a href="/login">
+                    <button class="px-[50px] py-3 rounded-lg bg-gradient-to-r from-[rgba(167,139,250,1)] to-[rgba(180,100,250,1)] font-bold text-black/50 duration-200 hover:from-[rgba(130,110,250,1)] hover:to-[rgba(150,70,200,1)] hover:text-white/70 w-full">Start
+                        Now</button>
+                </a>
+                <a href="">
+                    <button class="px-[40px] py-3 rounded-lg bg-none text-gray-500/80 border border-gray-800 hover:bg-gray-700/50 duration-100 font-semibold hover:text-gray-500/100 backdrop-blur-[1px] max-md:w-full">
+                        How it works
+                    </button>
+                </a>
+            </div>
+        </section>
+        <section class="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] w-full gap-[20px] min-h-[35vh]  px-20 py-5  max-md:px-10 max-sm:px-5 ">
+            <div
+                class="bg-gray-700/10 backdrop-blur-[3px] rounded-xl border border-gray-800 w-full h-full text-white flex flex-col items-center justify-center gap-[10px] px-5 py-3 duration-200 hover:bg-gray-700/20">
+                <i class="fa-solid fa-check text-4xl"></i>
+                <p>Smart tasks</p>
+                <p class="text-gray-500 text-sm">Organize tasks with priorities, deadlines, and categories.</p>
+            </div>
+            <div
+                class="bg-gray-700/10 backdrop-blur-[3px] rounded-xl border border-gray-800 w-full h-full text-white flex flex-col items-center justify-center gap-[10px] px-5 py-3 duration-200 hover:bg-gray-700/20">
+                <i class="fa-solid fa-pen text-3xl"></i>
+                <p>Diary</p>
+                <p class="text-gray-500 text-sm">Keep private notes and journal entries alongside your tasks.</p>
+            </div>
+            <div
+                class="bg-gray-700/10 backdrop-blur-[3px] rounded-xl border border-gray-800 w-full h-full text-white flex flex-col items-center justify-center gap-[10px] px-5 py-3 duration-200 hover:bg-gray-700/20 max-lg:col-span-1">
+                <i class="fa-solid fa-arrow-trend-up text-4xl"></i>
+                <p>Progress charts</p>
+                <p class="text-gray-500 text-sm">Visualize completed tasks over time with clean analytics.</p>
+            </div>
+            <div
+                class="bg-gray-700/10 backdrop-blur-[3px] rounded-xl border border-gray-800 w-full h-full text-white flex flex-col items-center justify-center gap-[10px] px-5 py-3 duration-200 hover:bg-gray-700/20 max-xl:col-span-3 max-lg:col-span-1">
+                <i class="fa-regular fa-envelope text-4xl"></i>
+                <p>Notifications</p>
+                <p class="text-gray-500 text-sm">Get email reminders before your deadlines hit.</p>
+            </div>
         </section>
         {% endblock %}
     </main>
 
+    <canvas class="w-full h-full absolute top-0 -z-[200]">
+    </canvas>
+
     {% include 'footer.html' %}
 </body>
+<script src="{% static 'script.js' %}"></script>
 
 </html>

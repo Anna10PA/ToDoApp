@@ -2,7 +2,7 @@
 
 {% block nav %}
     <nav class="flex items-center justify-between gap-[20px]">
-        <a href="/" class="text-white flex items-center gap-2 hover:text-green-400">
+        <a href="/" class="text-white flex items-center gap-2 hover:text-[rgb(167,139,250)]">
             <i class="fa-solid fa-arrow-left"></i>
             <span>Back to Home</span>
         </a>
@@ -10,12 +10,17 @@
 {% endblock %}
 
 {% block content %}
-<section class="flex flex-col items-center w-full gap-[45px]">
-    <h1 class="text-green-400 font-bold text-5xl">Login</h1>
+<section class="flex flex-col items-center w-full gap-[45px] min-h-[85vh] justify-center">
+    <h1 class="text-[rgb(167,139,250)] font-bold text-5xl">Login</h1>
     <form class="text-white flex flex-col items-center gap-[10px]" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <input type="submit" class="bg-green-500 text-black font-bold px-10 py-3 rounded cursor-pointer">
+        <input type="submit" class="bg-[rgb(167,139,250)] text-black font-bold px-10 py-3 rounded cursor-pointer">
+        <p class="translate-y-[20px]">
+            Don't you have an account? Then
+            <a href="{% url 'registration' %}" class="text-[rgb(167,139,250)] underline">SignUp</a>
+        </p>
+        <a href="{% url 'email' %}" class="text-[rgb(167,139,250)] underline translate-y-[15px]">forgot password</a>
     </form>
 </section>
 {% endblock %}

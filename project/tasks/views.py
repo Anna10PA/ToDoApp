@@ -30,7 +30,7 @@ def all_tasks(req):
         if req.POST['category_filter'].strip() and req.POST['category_filter'].strip() != 'All':
             user_tsk = task.objects.filter(category=req.POST['category_filter'])
             filter_value = req.POST['category_filter']
-     
+        
     return render(req, 'all_task.html', {
         'tasks': user_tsk,
         'category': category.objects.all().values(),
@@ -206,6 +206,10 @@ def view_task(req, id):
             'category': all_ctg
         })
     
-# 
-# def filter_tsks(req, ctg):
-#     if req.session.get('user'):
+# მხოლოდ შესრულებული თასქები
+def completed_tsks(req):
+    if req.session.get('user'):
+        if req.method == 'POST':
+            value = req.POST.get('completed')
+        return redirect('all')
+    return redirect('login')
